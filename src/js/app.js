@@ -3,13 +3,14 @@
 var Enemy = function(row, speed, direction) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
-    var row_y = [50,135,215];
+    var row_y = [135,215,300];
     this.x = -100;
     this.direction = direction;
     if(this.direction == 'left') {
         this.x = 600;
     }
     this.y = row_y[row];
+    console.log(this.y);
     this.speed = speed;
     
 
