@@ -91,15 +91,15 @@ var Engine = (function(global) {
         
         allEnemies.forEach(function(enemy) {
 
-            adjust = 30;
+            var adjust_x = 30,
+                adjust_y = 80,
+                rect1 = {x: player.x, y: player.y, width: player.width, height: player.height},
+                rect2 = {x: enemy.x, y: enemy.y, width: enemy.width, height: enemy.width};
 
-            var rect1 = {x: player.x, y: player.y, width: player.width, height: player.height};
-            var rect2 = {x: enemy.x, y: enemy.y, width: enemy.width, height: enemy.width};
-
-            if (rect1.x < rect2.x + rect2.width - adjust &&
-               rect1.x + rect1.width - adjust > rect2.x &&
-               rect1.y < rect2.y + rect2.height + adjust &&
-               rect1.height + rect1.y + adjust > rect2.y) {
+            if (rect1.x < rect2.x + rect2.width - adjust_x &&
+               rect1.x + rect1.width - adjust_x > rect2.x &&
+               rect1.y < rect2.y + rect2.height - adjust_y &&
+               rect1.height + rect1.y - adjust_y > rect2.y) {
                 console.log('We have a collision!');
                 reset();
             }
