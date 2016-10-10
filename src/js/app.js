@@ -1,3 +1,4 @@
+var score = 0;
 
 // Enemies our player must avoid
 var Enemy = function(row, speed, direction) {
@@ -54,14 +55,25 @@ Enemy.prototype.render = function() {
 // This class requires an update(), render() and
 // a handleInput() method.
 var Player = function() {
-    this.x = 200;
-    this.y = 405;
+    this.start_x = 200;
+    this.start_y = 405;
+    this.x = this.start_x;
+    this.y = this.start_y;
 
     this.sprite = 'images/char-boy.png';
 };
 
 Player.prototype.update = function(x, y) {
     
+
+};
+
+Player.prototype.score = function() {
+
+    score++;
+    console.log('Current score: '+score);
+    this.x = this.start_x;
+    this.y = this.start_y;
 
 };
 
@@ -102,12 +114,24 @@ Player.prototype.handleInput = function(input) {
         return;
     } 
 
-    //ctx.clearRect(0, 0, ctx.width, ctx.height);
+    
+    function sleep (time) {
+      return new Promise((resolve) => setTimeout(resolve, time));
+    }
 
     //Update player location
     this.x = x;
     this.y = y;
     this.render();
+
+    if(this.y < 73) {
+
+        //pause to show that you actually moved instead of immediately moving back to the starting position
+        sleep(250).then(() => {
+            this.score();
+        });
+
+    }
 
     console.log('x:'+this.x+'y:'+this.y);
 };
