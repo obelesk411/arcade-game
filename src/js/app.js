@@ -1,4 +1,3 @@
-var rotated = false;
 
 // Enemies our player must avoid
 var Enemy = function(row, speed, direction) {
@@ -29,6 +28,7 @@ Enemy.prototype.update = function(dt) {
     var move = this.speed * dt;
     if(this.direction == 'right') this.x += move;
     else this.x -= move;
+    
     //off screen reset
     if(this.x > 600) {
         this.x = -100;
@@ -45,28 +45,6 @@ Enemy.prototype.render = function() {
     this.height = resource.height;
     ctx.drawImage(resource, this.x, this.y);
     ctx.strokeRect(this.x, this.y, this.width, this.height);
-};
-
-Enemy.prototype.rotate = function(degrees) {
-
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-
-    // save the unrotated context of the canvas so we can restore it later
-    // the alternative is to untranslate & unrotate after drawing
-    ctx.save();
-
-    // move to the center of the canvas
-    ctx.translate(canvas.width/2,canvas.height/2);
-
-    // rotate the canvas to the specified degrees
-    ctx.rotate(degrees*Math.PI/180);
-
-    // draw the image
-    // since the context is rotated, the image will be rotated also
-    ctx.drawImage(image,-image.width/2,-image.width/2);
-
-    // we’re done with the rotating so restore the unrotated context
-    ctx.restore();
 };
 
 // Now write your own player class
