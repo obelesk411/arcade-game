@@ -41,10 +41,12 @@ Enemy.prototype.update = function(dt) {
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
     var resource = Resources.get(this.sprite);
+    
+    //grab sprite image height and width
     this.width = resource.width;
     this.height = resource.height;
+    
     ctx.drawImage(resource, this.x, this.y);
-    ctx.strokeRect(this.x, this.y, this.width, this.height);
 };
 
 // Now write your own player class
