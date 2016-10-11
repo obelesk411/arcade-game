@@ -1,4 +1,5 @@
 var score = 0;
+var deaths = 0;
 
 // Enemies our player must avoid
 var Enemy = function(row, speed, direction) {
@@ -71,11 +72,18 @@ Player.prototype.update = function(x, y) {
 Player.prototype.score = function() {
 
     score++;
-    console.log('Current score: '+score);
+    console.log('Score: '+score);
     this.x = this.start_x;
     this.y = this.start_y;
 
 };
+
+Player.prototype.die = function() {
+    deaths++;
+    console.log('Deaths: '+deaths);
+    this.x = this.start_x;
+    this.y = this.start_y;
+}
 
 Player.prototype.render = function() {
     var resource = Resources.get(this.sprite);

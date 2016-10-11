@@ -101,7 +101,7 @@ var Engine = (function(global) {
                rect1.y < rect2.y + rect2.height - adjust_y &&
                rect1.height + rect1.y - adjust_y > rect2.y) {
                 console.log('We have a collision!');
-                reset();
+                player.die();
             }
         });
 
@@ -184,8 +184,6 @@ var Engine = (function(global) {
      */
     function reset() {
         // noop
-        player.x = 200;
-        player.y = 405;
     }
 
     /* Go ahead and load all of the images we know we're going to need to
