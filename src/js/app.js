@@ -1,6 +1,40 @@
 var score = 0;
 var deaths = 0;
 
+var ScoreBoard = function() {
+    this.score = 0;
+    this.deaths = 0;
+
+    this.lifeSprite = 'images/char-boy.png';
+};
+
+//Draw the scoreboard
+ScoreBoard.prototype.render = function() {
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0,0,505,50);
+    
+    this.renderScore();
+    this.renderDeaths();
+};
+
+ScoreBoard.prototype.renderScore = function() {
+    ctx.font = "48px serif";
+    ctx.strokeText('SCORE: '+score, 10, 40);
+};
+
+ScoreBoard.prototype.renderDeaths = function() {
+    var resource = Resources.get(this.lifeSprite);
+    if(deaths < 3) ctx.drawImage(resource, 300, -30, resource.width/2, resource.height/2);
+    if(deaths < 2) ctx.drawImage(resource, 340, -30, resource.width/2, resource.height/2);
+    if(deaths < 1) ctx.drawImage(resource, 380, -30, resource.width/2, resource.height/2);
+    if(deaths > 3) { score = 0; deaths = 0; }
+};
+
+//
+ScoreBoard.prototype.update = function() {
+
+};
+
 // Enemies our player must avoid
 var Enemy = function(row, speed, direction) {
     // Variables applied to each of our instances go here,
@@ -147,6 +181,8 @@ Player.prototype.handleInput = function(input) {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
+var scoreBoard = new ScoreBoard();
+
 var allEnemies = [new Enemy(0,300,'right'),new Enemy(1,200,'left'),new Enemy(2,100,'left')];
 
 var player = new Player();
