@@ -1,16 +1,19 @@
-var score = 0;
-var deaths = 0;
+var scoreBoardColor = 'white';
+var scoreBoardFont = '48px serif';
+var playerSprite = 'images/char-boy.png';
+var enemySprite = 'images/enemy-bug.png';
 
 var ScoreBoard = function() {
     this.score = 0;
     this.deaths = 0;
+    this.color = scoreBoardColor;
+    this.font = scoreBoardFont;
 
-    this.lifeSprite = 'images/char-boy.png';
+    this.lifeSprite = playerSprite;
 };
 
-//Draw the scoreboard
 ScoreBoard.prototype.render = function() {
-    ctx.fillStyle = 'white';
+    ctx.fillStyle = this.color;
     ctx.fillRect(0,0,505,50);
     
     this.renderScore();
@@ -18,21 +21,24 @@ ScoreBoard.prototype.render = function() {
 };
 
 ScoreBoard.prototype.renderScore = function() {
-    ctx.font = "48px serif";
-    ctx.strokeText('SCORE: '+score, 10, 40);
+    ctx.font = this.font;
+    ctx.strokeText('SCORE: '+this.score, 10, 40);
 };
 
 ScoreBoard.prototype.renderDeaths = function() {
     var resource = Resources.get(this.lifeSprite);
-    if(deaths < 3) ctx.drawImage(resource, 300, -30, resource.width/2, resource.height/2);
-    if(deaths < 2) ctx.drawImage(resource, 340, -30, resource.width/2, resource.height/2);
-    if(deaths < 1) ctx.drawImage(resource, 380, -30, resource.width/2, resource.height/2);
-    if(deaths > 3) { score = 0; deaths = 0; }
+    if(this.deaths < 3) ctx.drawImage(resource, 300, -30, resource.width/2, resource.height/2);
+    if(this.deaths < 2) ctx.drawImage(resource, 340, -30, resource.width/2, resource.height/2);
+    if(this.deaths < 1) ctx.drawImage(resource, 380, -30, resource.width/2, resource.height/2);
+    if(this.deaths > 3) { this.score = 0; this.deaths = 0; }
 };
 
-//
-ScoreBoard.prototype.update = function() {
+ScoreBoard.prototype.addPoint = function() {
+    this.score++;
+};
 
+ScoreBoard.prototype.addDeath = function() {
+    this.deaths++;
 };
 
 // Enemies our player must avoid
@@ -52,7 +58,7 @@ var Enemy = function(row, speed, direction) {
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
-    this.sprite = 'images/enemy-bug.png';
+    this.sprite = enemySprite;
 };
 
 // Update the enemy's position, required method for game
@@ -95,26 +101,34 @@ var Player = function() {
     this.x = this.start_x;
     this.y = this.start_y;
 
-    this.sprite = 'images/char-boy.png';
+    this.sprite = playerSprite;
 };
 
-Player.prototype.update = function(x, y) {
-    
+Player.prototype.update = function(x = this.x, y = this.y) {
+
+    //Update player location
+    this.x = x;
+    this.y = y;
+
+    if(this.y < 73) {
+
+        this.score();
+
+    }
+
+    console.log('x:'+this.x+'y:'+this.y);
 
 };
 
 Player.prototype.score = function() {
-
-    score++;
-    console.log('Score: '+score);
     this.x = this.start_x;
     this.y = this.start_y;
-
+    
+    scoreBoard.addPoint();
 };
 
 Player.prototype.die = function() {
-    deaths++;
-    console.log('Deaths: '+deaths);
+    scoreBoard.addDeath();
     this.x = this.start_x;
     this.y = this.start_y;
 }
@@ -156,26 +170,7 @@ Player.prototype.handleInput = function(input) {
         return;
     } 
 
-    
-    function sleep (time) {
-      return new Promise((resolve) => setTimeout(resolve, time));
-    }
-
-    //Update player location
-    this.x = x;
-    this.y = y;
-    this.render();
-
-    if(this.y < 73) {
-
-        //pause to show that you actually moved instead of immediately moving back to the starting position
-        sleep(250).then(() => {
-            this.score();
-        });
-
-    }
-
-    console.log('x:'+this.x+'y:'+this.y);
+    this.update(x, y);
 };
 
 // Now instantiate your objects.
