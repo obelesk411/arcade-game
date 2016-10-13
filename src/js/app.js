@@ -140,6 +140,12 @@ Enemy.prototype.render = function() {
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
+
+/**
+ * @description Respresents player
+ * @constructor
+ */
+
 var Player = function() {
     this.start_x = 200;
     this.start_y = 405;
@@ -149,6 +155,13 @@ var Player = function() {
     this.sprite = playerSprite;
 };
 
+/**
+ * @description Updates player position
+ * @param {number} x player x coordinate
+ * @param {number} y player y coordinate
+ * @return {void}
+ */
+
 Player.prototype.update = function(x = this.x, y = this.y) {
 
     //Update player location
@@ -156,27 +169,46 @@ Player.prototype.update = function(x = this.x, y = this.y) {
     this.y = y;
 
     if(this.y < 73) {
-
         this.score();
-
     }
 
     console.log('x:'+this.x+'y:'+this.y);
 
 };
 
+/**
+ * @description Moves player back to starting position
+ * @return {void}
+ */
+
+Player.prototype.reset = function() {
+    this.update(this.start_x, this.start_y);
+}
+
+/**
+ * @description Updates player score
+ * @return {void}
+ */
+
 Player.prototype.score = function() {
-    this.x = this.start_x;
-    this.y = this.start_y;
-    
+    this.reset();    
     scoreBoard.addPoint();
 };
 
+/**
+ * @description Kills player
+ * @return {void}
+ */
+
 Player.prototype.die = function() {
+    this.reset();
     scoreBoard.addDeath();
-    this.x = this.start_x;
-    this.y = this.start_y;
 }
+
+/**
+ * @description Draws player on canvas
+ * @return {void}
+ */
 
 Player.prototype.render = function() {
     var resource = Resources.get(this.sprite);
@@ -185,6 +217,12 @@ Player.prototype.render = function() {
     ctx.drawImage(resource, this.x, this.y);
 
 };
+
+/**
+ * @description Interprets keystrokes for player movement
+ * @param {number} input keystroke code
+ * @return {void}
+ */
 
 Player.prototype.handleInput = function(input) {
 
