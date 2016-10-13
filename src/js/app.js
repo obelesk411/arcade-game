@@ -3,6 +3,11 @@ var scoreBoardFont = '48px serif';
 var playerSprite = 'images/char-boy.png';
 var enemySprite = 'images/enemy-bug.png';
 
+/**
+ * @description Represents the score board
+ * @constructor
+ */
+
 var ScoreBoard = function() {
     this.score = 0;
     this.deaths = 0;
@@ -12,6 +17,11 @@ var ScoreBoard = function() {
     this.lifeSprite = playerSprite;
 };
 
+/**
+ * @description Places the score board on the canvas
+ * @returns {void}
+ */
+
 ScoreBoard.prototype.render = function() {
     ctx.fillStyle = this.color;
     ctx.fillRect(0,0,505,50);
@@ -20,10 +30,20 @@ ScoreBoard.prototype.render = function() {
     this.renderDeaths();
 };
 
+/**
+ * @description Adds the score to the score board
+ * @returns {void}
+ */
+
 ScoreBoard.prototype.renderScore = function() {
     ctx.font = this.font;
     ctx.strokeText('SCORE: '+this.score, 10, 40);
 };
+
+/**
+ * @description Updates remaining lives on score board
+ * @returns {void}
+ */
 
 ScoreBoard.prototype.renderDeaths = function() {
     var resource = Resources.get(this.lifeSprite);
@@ -33,9 +53,19 @@ ScoreBoard.prototype.renderDeaths = function() {
     if(this.deaths > 3) { this.score = 0; this.deaths = 0; }
 };
 
+/**
+ * @description Adds 1 point to score
+ * @returns {void}
+ */
+
 ScoreBoard.prototype.addPoint = function() {
     this.score++;
 };
+
+/**
+ * @description Adds 1 death
+ * @returns {void}
+ */
 
 ScoreBoard.prototype.addDeath = function() {
     this.deaths++;
