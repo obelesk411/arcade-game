@@ -74,6 +74,43 @@ ScoreBoard.prototype.addDeath = function() {
     this.deaths++;
 };
 
+var OverLay = function() {
+
+};
+
+OverLay.prototype.render = function() {
+
+};
+
+OverLay.prototype.update = function() {
+
+};
+
+//fade overlay in
+OverLay.prototype.fadeIn = function() {
+
+};
+
+//fade overlay out
+OverLay.prototype.fadeOut = function() {
+
+};
+
+//instructions before game play, integrate play button
+OverLay.prototype.gameStart = function() {
+
+};
+
+//game lose screen, continue button
+OverLay.prototype.gameLose = function() {
+
+};
+
+//game win screen, continue button
+OverLay.prototype.gameWin = function() {
+
+};
+
 /**
  * @description Represents an enemy
  * @param {number} row
