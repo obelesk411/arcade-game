@@ -4,6 +4,7 @@ var scoreBoardColor = 'white';
 var scoreBoardFont = '48px serif';
 var playerSprite = 'images/char-boy.png';
 var enemySprite = 'images/enemy-bug.png';
+var paused = false;
 
 /**
  * @description Represents the score board
@@ -278,6 +279,12 @@ document.addEventListener('keyup', function(e) {
         39: 'right',
         40: 'down'
     };
+
+    // if p key pressed toggle pause
+    if(e.keyCode === 80) {
+        paused = !paused;
+        return;
+    }
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
