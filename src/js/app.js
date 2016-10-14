@@ -1,3 +1,5 @@
+// configure score board and sprites here
+
 var scoreBoardColor = 'white';
 var scoreBoardFont = '48px serif';
 var playerSprite = 'images/char-boy.png';
@@ -146,7 +148,8 @@ Enemy.prototype.render = function() {
  * @constructor
  */
 
-var Player = function() {
+var Player = function(scoreBoard) {
+    this.scoreBoard = scoreBoard;
     this.start_x = 200;
     this.start_y = 405;
     this.x = this.start_x;
@@ -192,7 +195,7 @@ Player.prototype.reset = function() {
 
 Player.prototype.score = function() {
     this.reset();    
-    scoreBoard.addPoint();
+    this.scoreBoard.addPoint();
 };
 
 /**
@@ -202,7 +205,7 @@ Player.prototype.score = function() {
 
 Player.prototype.die = function() {
     this.reset();
-    scoreBoard.addDeath();
+    this.scoreBoard.addDeath();
 }
 
 /**
@@ -263,7 +266,7 @@ var scoreBoard = new ScoreBoard();
 
 var allEnemies = [new Enemy(0,300,'right'),new Enemy(1,200,'left'),new Enemy(2,100,'left')];
 
-var player = new Player();
+var player = new Player(scoreBoard);
 
 
 // This listens for key presses and sends the keys to your
