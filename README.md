@@ -1,5 +1,5 @@
 # HTML5 Canvas Game With Bugs && Stuff
-This is a portfolio piece meant to demonstrate my javascript skillz and experience with the canvas element.
+This is a portfolio piece meant to demonstrate my javascript and canvas skillz.
 
 ## Installation
 ```
@@ -18,11 +18,11 @@ var enemySprite = 'images/enemy-bug.png';
 ```
 
 ## Usage
-Use the arrow keys to move your player
+Use the arrow keys to move your player.
 
-Press P to pause and unpause
+Press P to pause and unpause.
 
-You get 4 lives
+You get 4 lives.
 
 If you come into contact with a bug you'll lose a life and the player will move back to the starting postion.
 
