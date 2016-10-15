@@ -45,7 +45,7 @@ var Engine = (function(global) {
         /* Call our update/render functions, pass along the time delta to
          * our update function since it may be used for smooth animation.
          */
-        
+
         if(!win.paused) {
             update(dt);
             render();
@@ -180,6 +180,8 @@ var Engine = (function(global) {
         player.render();
 
         scoreBoard.render();
+
+        overLay.render();
     }
 
     /* This function does nothing but it could have been a good place to

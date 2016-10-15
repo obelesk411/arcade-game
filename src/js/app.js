@@ -53,7 +53,7 @@ ScoreBoard.prototype.renderDeaths = function() {
     if(this.deaths < 3) ctx.drawImage(resource, 300, -30, resource.width/2, resource.height/2);
     if(this.deaths < 2) ctx.drawImage(resource, 340, -30, resource.width/2, resource.height/2);
     if(this.deaths < 1) ctx.drawImage(resource, 380, -30, resource.width/2, resource.height/2);
-    if(this.deaths > 3) { this.score = 0; this.deaths = 0; }
+    if(this.deaths > 3) { this.reset(); }
 };
 
 /**
@@ -74,12 +74,19 @@ ScoreBoard.prototype.addDeath = function() {
     this.deaths++;
 };
 
+ScoreBoard.prototype.reset = function() {
+    this.score = 0;
+    this.deaths = 0;
+};
+
 var OverLay = function() {
 
 };
 
 OverLay.prototype.render = function() {
-
+    ctx.globalAlpha=0.5;
+    ctx.fillRect(20,100,465,346); //20,546
+    this.gameStart();
 };
 
 OverLay.prototype.update = function() {
@@ -98,7 +105,28 @@ OverLay.prototype.fadeOut = function() {
 
 //instructions before game play, integrate play button
 OverLay.prototype.gameStart = function() {
+    ctx.font = '20px serif';
+    ctx.fillStyle = 'green';
+    ctx.globalAlpha=1;
+    var verticalSpacing = 50;
+    var start_y = 40;
+    var start_x = 150;
 
+    var displayText = [
+        'Use the arrow keys to move your player.',
+        'Press P to pause and unpause.',
+        'You get 4 lives.',
+        'If you come into contact with a bug you\'ll lose a life.',
+        'If you make it across to the river you\'ll score a point.',
+        'Try it. Press the spacebar when you\'re ready to start.'
+    ];
+
+    displayText.forEach(function(line) {
+        ctx.fillText(line, start_y, start_x);
+        start_x += verticalSpacing;
+    });
+    //on spacebar reset score, deaths and starting position
+    //ctx.fillText('Good luck. Remember your training and you might make it back alive.', 40, 290);
 };
 
 //game lose screen, continue button
@@ -305,6 +333,8 @@ var scoreBoard = new ScoreBoard();
 var allEnemies = [new Enemy(0,300,'right'),new Enemy(1,200,'left'),new Enemy(2,100,'left')];
 
 var player = new Player(scoreBoard);
+
+var overLay = new OverLay();
 
 
 // This listens for key presses and sends the keys to your
