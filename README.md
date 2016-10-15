@@ -2,8 +2,10 @@
 This is a portfolio piece meant to demonstrate my javascript skillz and experience with the canvas element.
 
 ## Installation
+```
 git clone 
 cd arcade/dist/
+```
 open index.html in browser
 
 ## Configuration
