@@ -181,7 +181,7 @@ var Engine = (function(global) {
 
         scoreBoard.render();
 
-        overLay.render();
+        overlay.render();
     }
 
     /* This function does nothing but it could have been a good place to

@@ -9,7 +9,7 @@ var enemySprite = 'images/enemy-bug.png';
 var paused = false;
 
 // set to true if overlay is present
-var overLayPresent = true;
+var overlayPresent = true;
 
 /**
  * @description Represents the score board
@@ -89,36 +89,36 @@ ScoreBoard.prototype.reset = function() {
 
 
 
-var OverLay = function(player, scoreBoard) {
+var Overlay = function(player, scoreBoard) {
     this.scoreBoard = scoreBoard;
     this.player = player;
     this.alpha = 0.5;
 };
 
-OverLay.prototype.render = function() {
+Overlay.prototype.render = function() {
     ctx.globalAlpha = this.alpha;
-    if(overLayPresent) this.gameStart();
+    if(overlayPresent) this.gameStart();
 };
 
-OverLay.prototype.update = function() {
+Overlay.prototype.update = function() {
 
 };
 
 //fade overlay in
-OverLay.prototype.fadeIn = function() {
+Overlay.prototype.fadeIn = function() {
 
 };
 
 //fade overlay out
-OverLay.prototype.fadeOut = function() {
+Overlay.prototype.fadeOut = function() {
     this.scoreBoard.reset();
     this.player.reset();
-    overLayPresent = false;
+    overlayPresent = false;
 };
 
 //instructions before game play, integrate play button
-OverLay.prototype.gameStart = function() {
-    overLayPresent = true;
+Overlay.prototype.gameStart = function() {
+    overlayPresent = true;
     ctx.fillRect(20,100,465,346); //20,546
     ctx.font = '20px serif';
     ctx.fillStyle = 'green';
@@ -145,12 +145,12 @@ OverLay.prototype.gameStart = function() {
 };
 
 //game lose screen, continue button
-OverLay.prototype.gameLose = function() {
+Overlay.prototype.gameLose = function() {
 
 };
 
 //game win screen, continue button
-OverLay.prototype.gameWin = function() {
+Overlay.prototype.gameWin = function() {
 
 };
 
@@ -351,7 +351,7 @@ var allEnemies = [new Enemy(0,300,'right'),new Enemy(1,200,'left'),new Enemy(2,1
 
 var player = new Player(scoreBoard);
 
-var overLay = new OverLay(player, scoreBoard);
+var overlay = new Overlay(player, scoreBoard);
 
 
 // This listens for key presses and sends the keys to your
@@ -371,9 +371,9 @@ document.addEventListener('keyup', function(e) {
     }
 
     // if space pressed fade out overlay and reset score
-    if(e.keyCode === 32 && overLay !== false)
+    if(e.keyCode === 32 && overlayPresent !== false)
     {
-        overLay.fadeOut();
+        overlay.fadeOut();
         return;
     }
 
