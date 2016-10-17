@@ -4,7 +4,12 @@ var scoreBoardColor = 'white';
 var scoreBoardFont = '48px serif';
 var playerSprite = 'images/char-boy.png';
 var enemySprite = 'images/enemy-bug.png';
+
+// controls pause state
 var paused = false;
+
+// set to true if overlay is present
+var overLayPresent = true;
 
 /**
  * @description Represents the score board
@@ -12,6 +17,7 @@ var paused = false;
  */
 
 var ScoreBoard = function() {
+    this.alpha = 1;
     this.score = 0;
     this.deaths = 0;
     this.color = scoreBoardColor;
@@ -26,6 +32,7 @@ var ScoreBoard = function() {
  */
 
 ScoreBoard.prototype.render = function() {
+    ctx.globalAlpha = this.alpha;
     ctx.fillStyle = this.color;
     ctx.fillRect(0,0,505,50);
     
@@ -79,14 +86,18 @@ ScoreBoard.prototype.reset = function() {
     this.deaths = 0;
 };
 
-var OverLay = function() {
 
+
+
+var OverLay = function(player, scoreBoard) {
+    this.scoreBoard = scoreBoard;
+    this.player = player;
+    this.alpha = 0.5;
 };
 
 OverLay.prototype.render = function() {
-    ctx.globalAlpha=0.5;
-    ctx.fillRect(20,100,465,346); //20,546
-    this.gameStart();
+    ctx.globalAlpha = this.alpha;
+    if(overLayPresent) this.gameStart();
 };
 
 OverLay.prototype.update = function() {
@@ -100,11 +111,15 @@ OverLay.prototype.fadeIn = function() {
 
 //fade overlay out
 OverLay.prototype.fadeOut = function() {
-
+    this.scoreBoard.reset();
+    this.player.reset();
+    overLayPresent = false;
 };
 
 //instructions before game play, integrate play button
 OverLay.prototype.gameStart = function() {
+    overLayPresent = true;
+    ctx.fillRect(20,100,465,346); //20,546
     ctx.font = '20px serif';
     ctx.fillStyle = 'green';
     ctx.globalAlpha=1;
@@ -150,6 +165,7 @@ OverLay.prototype.gameWin = function() {
 var Enemy = function(row, speed, direction) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
+    this.alpha = 1;
     var row_y = [135,215,300];
     this.x = -100;
     this.direction = direction;
@@ -201,7 +217,7 @@ Enemy.prototype.render = function() {
     //grab sprite image height and width
     this.width = resource.width;
     this.height = resource.height;
-    
+    ctx.globalAlpha = this.alpha;
     ctx.drawImage(resource, this.x, this.y);
 };
 
@@ -216,6 +232,7 @@ Enemy.prototype.render = function() {
 
 var Player = function(scoreBoard) {
     this.scoreBoard = scoreBoard;
+    this.alpha = 1;
     this.start_x = 200;
     this.start_y = 405;
     this.x = this.start_x;
@@ -283,8 +300,8 @@ Player.prototype.render = function() {
     var resource = Resources.get(this.sprite);
     this.width = resource.width;
     this.height = resource.height;
+    ctx.globalAlpha = this.alpha;
     ctx.drawImage(resource, this.x, this.y);
-
 };
 
 /**
@@ -334,7 +351,7 @@ var allEnemies = [new Enemy(0,300,'right'),new Enemy(1,200,'left'),new Enemy(2,1
 
 var player = new Player(scoreBoard);
 
-var overLay = new OverLay();
+var overLay = new OverLay(player, scoreBoard);
 
 
 // This listens for key presses and sends the keys to your
@@ -350,6 +367,13 @@ document.addEventListener('keyup', function(e) {
     // if p key pressed toggle pause
     if(e.keyCode === 80) {
         paused = !paused;
+        return;
+    }
+
+    // if space pressed fade out overlay and reset score
+    if(e.keyCode === 32 && overLay !== false)
+    {
+        overLay.fadeOut();
         return;
     }
 
