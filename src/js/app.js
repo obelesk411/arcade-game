@@ -110,7 +110,7 @@ Overlay.prototype.fadeIn = function() {
 };
 
 //fade overlay out
-Overlay.prototype.fadeOut = function() {
+Overlay.prototype.remove = function() {
     this.scoreBoard.reset();
     this.player.reset();
     overlayPresent = false;
@@ -118,14 +118,6 @@ Overlay.prototype.fadeOut = function() {
 
 //instructions before game play, integrate play button
 Overlay.prototype.gameStart = function() {
-    overlayPresent = true;
-    ctx.fillRect(20,100,465,346); //20,546
-    ctx.font = '20px serif';
-    ctx.fillStyle = 'green';
-    ctx.globalAlpha=1;
-    var verticalSpacing = 50;
-    var start_y = 40;
-    var start_x = 150;
 
     var displayText = [
         'Use the arrow keys to move your player.',
@@ -135,14 +127,27 @@ Overlay.prototype.gameStart = function() {
         'If you make it across to the river you\'ll score a point.',
         'Try it. Press the spacebar when you\'re ready to start.'
     ];
+    //'Good luck. Remember your training and you might make it back alive.'
+
+    this.display(displayText);
+};
+
+Overlay.prototype.display = function(displayText, start_x = 150, start_y = 40, verticalSpacing = 50) {
+
+    overlayPresent = true;
+    ctx.fillRect(20, 100, 465, 346); //20,546
+    ctx.font = '20px serif';
+    ctx.fillStyle = 'green';
+    ctx.globalAlpha=1;
+    var verticalSpacing = verticalSpacing;
+    var start_y = start_y;
+    var start_x = start_x;
 
     displayText.forEach(function(line) {
         ctx.fillText(line, start_y, start_x);
         start_x += verticalSpacing;
     });
-    //on spacebar reset score, deaths and starting position
-    //ctx.fillText('Good luck. Remember your training and you might make it back alive.', 40, 290);
-};
+}
 
 //game lose screen, continue button
 Overlay.prototype.gameLose = function() {
@@ -373,7 +378,7 @@ document.addEventListener('keyup', function(e) {
     // if space pressed fade out overlay and reset score
     if(e.keyCode === 32 && overlayPresent !== false)
     {
-        overlay.fadeOut();
+        overlay.remove();
         return;
     }
 
