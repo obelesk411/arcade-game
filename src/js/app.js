@@ -82,9 +82,12 @@ ScoreBoard.prototype.renderScore = function() {
 
 ScoreBoard.prototype.renderDeaths = function() {
     var resource = Resources.get(this.lifeSprite);
-    if(this.deaths < 3) ctx.drawImage(resource, 300, -30, resource.width/2, resource.height/2);
-    if(this.deaths < 2) ctx.drawImage(resource, 340, -30, resource.width/2, resource.height/2);
-    if(this.deaths < 1) ctx.drawImage(resource, 380, -30, resource.width/2, resource.height/2);
+
+    // draw mini sprites for remaining lives
+    for(var i = 0; i < 4; i++) {
+        if(this.deaths < i)
+            ctx.drawImage(resource, 300 + (i * 40), -30, resource.width/2, resource.height/2);
+    }
 };
 
 /**
