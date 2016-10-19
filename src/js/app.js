@@ -1,3 +1,5 @@
+'use strict';
+
 // configure score board and sprites here
 
 var scoreBoardColor = 'white';
@@ -8,15 +10,38 @@ var enemySprite = 'images/enemy-bug.png';
 // controls pause state
 var paused = false;
 
-// set to true if overlay is present
-var overlayPresent = true;
+// controls whether player is able to move
+var haltPlayer = true;
+
+// text for game overlays
+
+var overlayTypes = {
+    start: [
+        'Use the arrow keys to move your player.',
+        'Press P to pause and unpause.',
+        'You get 4 lives.',
+        'If you come into contact with a bug you\'ll lose a life.',
+        'If you make it across to the river you\'ll score a point.',
+        'Try it. Press the spacebar when you\'re ready to start.'
+    ],
+    win: [
+        'You WIN! :)',
+        'Press spacebar to play again.'
+    ],
+    lose: [
+        'You lose :(',
+        'Press spacebar to play again.'
+    ]
+};
 
 /**
  * @description Represents the score board
+ * @param {object} overlay object
  * @constructor
  */
 
-var ScoreBoard = function() {
+var ScoreBoard = function(overlay) {
+    this.overlay = overlay;
     this.alpha = 1;
     this.score = 0;
     this.deaths = 0;
@@ -60,8 +85,16 @@ ScoreBoard.prototype.renderDeaths = function() {
     if(this.deaths < 3) ctx.drawImage(resource, 300, -30, resource.width/2, resource.height/2);
     if(this.deaths < 2) ctx.drawImage(resource, 340, -30, resource.width/2, resource.height/2);
     if(this.deaths < 1) ctx.drawImage(resource, 380, -30, resource.width/2, resource.height/2);
-    if(this.deaths > 3) { this.reset(); }
 };
+
+/**
+ * @description Triggers overlay and halts game upon game completion
+ * @return {void}
+ */
+
+ScoreBoard.prototype.update = function() {
+
+}
 
 /**
  * @description Adds 1 point to score
@@ -70,6 +103,9 @@ ScoreBoard.prototype.renderDeaths = function() {
 
 ScoreBoard.prototype.addPoint = function() {
     this.score++;
+    if(this.score > 9) {
+        this.win();
+    }
 };
 
 /**
@@ -79,7 +115,37 @@ ScoreBoard.prototype.addPoint = function() {
 
 ScoreBoard.prototype.addDeath = function() {
     this.deaths++;
+    if(this.deaths > 3) {
+        this.lose();
+    }
 };
+
+/**
+ * @description Displays winning overlay
+ * @returns {void}
+ */
+
+ScoreBoard.prototype.win = function() {
+    this.overlay.displayText = overlayTypes.win;
+    this.overlay.visible = true;
+    haltPlayer = true;
+};
+
+/**
+ * @description Displays losing overlay
+ * @returns {void}
+ */
+
+ScoreBoard.prototype.lose = function() {
+    this.overlay.displayText = overlayTypes.lose;
+    this.overlay.visible = true;
+    haltPlayer = true;
+};
+
+/**
+ * @description Resets score and deaths to zero
+ * @returns {void}
+ */
 
 ScoreBoard.prototype.reset = function() {
     this.score = 0;
@@ -88,76 +154,39 @@ ScoreBoard.prototype.reset = function() {
 
 
 
+/**
+ * @description Represents game overlays
+ * @constructor
+ */
 
 var Overlay = function(player, scoreBoard) {
-    this.scoreBoard = scoreBoard;
-    this.player = player;
+    this.displayText = [];
     this.alpha = 0.5;
+    this.visible = false;
 };
 
 Overlay.prototype.render = function() {
     ctx.globalAlpha = this.alpha;
-    if(overlayPresent) this.gameStart();
+    if(this.visible) this.display();
 };
 
-Overlay.prototype.update = function() {
-
-};
-
-//fade overlay in
-Overlay.prototype.fadeIn = function() {
-
-};
-
-//fade overlay out
+//remove
 Overlay.prototype.remove = function() {
-    this.scoreBoard.reset();
-    this.player.reset();
-    overlayPresent = false;
+    this.visible = false;
+    haltPlayer = false;
 };
 
-//instructions before game play, integrate play button
-Overlay.prototype.gameStart = function() {
-
-    var displayText = [
-        'Use the arrow keys to move your player.',
-        'Press P to pause and unpause.',
-        'You get 4 lives.',
-        'If you come into contact with a bug you\'ll lose a life.',
-        'If you make it across to the river you\'ll score a point.',
-        'Try it. Press the spacebar when you\'re ready to start.'
-    ];
-    //'Good luck. Remember your training and you might make it back alive.'
-
-    this.display(displayText);
-};
-
-Overlay.prototype.display = function(displayText, start_x = 150, start_y = 40, verticalSpacing = 50) {
-
-    overlayPresent = true;
+Overlay.prototype.display = function(start_x = 150, start_y = 40, verticalSpacing = 50) {
     ctx.fillRect(20, 100, 465, 346); //20,546
     ctx.font = '20px serif';
     ctx.fillStyle = 'green';
-    ctx.globalAlpha=1;
-    var verticalSpacing = verticalSpacing;
-    var start_y = start_y;
-    var start_x = start_x;
-
-    displayText.forEach(function(line) {
+    ctx.globalAlpha = 1;
+    
+    this.displayText.forEach(function(line) {
         ctx.fillText(line, start_y, start_x);
         start_x += verticalSpacing;
     });
 }
-
-//game lose screen, continue button
-Overlay.prototype.gameLose = function() {
-
-};
-
-//game win screen, continue button
-Overlay.prototype.gameWin = function() {
-
-};
 
 /**
  * @description Represents an enemy
@@ -226,10 +255,6 @@ Enemy.prototype.render = function() {
     ctx.drawImage(resource, this.x, this.y);
 };
 
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
-
 /**
  * @description Respresents player
  * @constructor
@@ -282,7 +307,7 @@ Player.prototype.reset = function() {
  */
 
 Player.prototype.score = function() {
-    this.reset();    
+    this.reset();
     this.scoreBoard.addPoint();
 };
 
@@ -316,6 +341,7 @@ Player.prototype.render = function() {
  */
 
 Player.prototype.handleInput = function(input) {
+    if(haltPlayer) return;
 
     var moveVertical = 83;
     var moveHorizontal = 101;
@@ -350,13 +376,16 @@ Player.prototype.handleInput = function(input) {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-var scoreBoard = new ScoreBoard();
+var overlay = new Overlay();
 
-var allEnemies = [new Enemy(0,300,'right'),new Enemy(1,200,'left'),new Enemy(2,100,'left')];
+overlay.displayText = overlayTypes.start;
+overlay.visible = true;
+
+var scoreBoard = new ScoreBoard(overlay);
 
 var player = new Player(scoreBoard);
 
-var overlay = new Overlay(player, scoreBoard);
+var allEnemies = [new Enemy(0,300,'right'),new Enemy(1,200,'left'),new Enemy(2,100,'left')];
 
 
 // This listens for key presses and sends the keys to your
@@ -375,10 +404,11 @@ document.addEventListener('keyup', function(e) {
         return;
     }
 
-    // if space pressed fade out overlay and reset score
-    if(e.keyCode === 32 && overlayPresent !== false)
+    // if space pressed remove overlay and reset score
+    if(e.keyCode === 32 && overlay.visible !== false)
     {
         overlay.remove();
+        scoreBoard.reset();
         return;
     }
 
