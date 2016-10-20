@@ -84,8 +84,8 @@ ScoreBoard.prototype.renderDeaths = function() {
     var resource = Resources.get(this.lifeSprite);
 
     // draw mini sprites for remaining lives
-    for(var i = 0; i < 4; i++) {
-        if(this.deaths < i)
+    for (var i = 0; i < 4; i++) {
+        if (this.deaths < i)
             ctx.drawImage(resource, 300 + (i * 40), -30, resource.width/2, resource.height/2);
     }
 };
@@ -106,7 +106,7 @@ ScoreBoard.prototype.update = function() {
 
 ScoreBoard.prototype.addPoint = function() {
     this.score++;
-    if(this.score > 9) {
+    if (this.score > 9) {
         this.win();
     }
 };
@@ -118,7 +118,7 @@ ScoreBoard.prototype.addPoint = function() {
 
 ScoreBoard.prototype.addDeath = function() {
     this.deaths++;
-    if(this.deaths > 3) {
+    if (this.deaths > 3) {
         this.lose();
     }
 };
@@ -176,7 +176,7 @@ var Overlay = function(player, scoreBoard) {
 Overlay.prototype.render = function() {
     ctx.globalAlpha = this.alpha;
 
-    if(this.visible) {
+    if (this.visible) {
 
         // set up overlay background and styles
         ctx.fillRect(20, 100, 465, 346);
@@ -220,10 +220,7 @@ var Enemy = function(row, speed, direction) {
     this.direction = direction;
 
     // set up starting postion
-    this.x = -100;
-    if(this.direction == 'left') {
-        this.x = 600;
-    }
+    this.x = (this.direction == 'left') ? 600 : -100;
 
     
     this.y = this.row_y[row];
@@ -245,13 +242,13 @@ Enemy.prototype.update = function(dt) {
     var move = this.speed * dt;
 
     // determine direction 
-    if(this.direction == 'right') this.x += move;
+    if (this.direction == 'right') this.x += move;
     else this.x -= move;
     
     // if sprite off screen move to starting position
-    if(this.x > 600) {
+    if (this.x > 600) {
         this.x = -100;
-    } else if(this.x < -100) {
+    } else if (this.x < -100) {
         this.x = 600;
     }
 
@@ -303,7 +300,7 @@ Player.prototype.update = function(x = this.x, y = this.y) {
     this.y = y;
 
     // if in river player scores
-    if(this.y < 73) {
+    if (this.y < 73) {
         this.score();
     }
 
@@ -363,7 +360,7 @@ Player.prototype.render = function() {
  */
 
 Player.prototype.handleInput = function(input) {
-    if(haltPlayer) return;
+    if (haltPlayer) return;
 
     var moveVertical = 83;
     var moveHorizontal = 101;
@@ -371,7 +368,7 @@ Player.prototype.handleInput = function(input) {
     var y = this.y;
     var x = this.x;
 
-    switch(input) {
+    switch (input) {
         case 'up':
             y -= moveVertical;
             break;
@@ -387,7 +384,7 @@ Player.prototype.handleInput = function(input) {
     }
 
     // Do not move if offscreen
-    if(x > 402 || x < -2 || y > 415 || y < -10) {
+    if (x > 402 || x < -2 || y > 415 || y < -10) {
         console.log('STOP:x:'+x+'y:'+y);
         return;
     } 
@@ -418,13 +415,13 @@ document.addEventListener('keyup', function(e) {
     };
 
     // if p key pressed toggle pause
-    if(e.keyCode === 80) {
+    if (e.keyCode === 80) {
         paused = !paused;
         return;
     }
 
     // if space pressed remove overlay and reset score
-    if(e.keyCode === 32 && overlay.visible !== false)
+    if (e.keyCode === 32 && overlay.visible !== false)
     {
         overlay.remove();
         scoreBoard.reset();
