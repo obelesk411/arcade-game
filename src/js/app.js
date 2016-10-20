@@ -1,7 +1,8 @@
-'use strict';
+(function() {
+    'use strict';
+}());
 
 // configure score board and sprites here
-
 var scoreBoardColor = 'white';
 var scoreBoardFont = '48px serif';
 var playerSprite = 'images/char-boy.png';
@@ -97,7 +98,7 @@ ScoreBoard.prototype.renderDeaths = function() {
 
 ScoreBoard.prototype.update = function() {
 
-}
+};
 
 /**
  * @description Adds 1 point to score
@@ -315,7 +316,7 @@ Player.prototype.update = function(x = this.x, y = this.y) {
 
 Player.prototype.reset = function() {
     this.update(this.start_x, this.start_y);
-}
+};
 
 /**
  * @description Updates player score
@@ -335,7 +336,7 @@ Player.prototype.score = function() {
 Player.prototype.die = function() {
     this.reset();
     this.scoreBoard.addDeath();
-}
+};
 
 /**
  * @description Draws player on canvas
