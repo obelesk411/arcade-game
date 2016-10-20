@@ -168,12 +168,17 @@ var Overlay = function(player, scoreBoard) {
     this.visible = false;
 };
 
-
+/**
+ * @description Draws overlay on the canvas
+ * @returns {void}
+ */
 
 Overlay.prototype.render = function() {
     ctx.globalAlpha = this.alpha;
 
     if(this.visible) {
+
+        // set up overlay background and styles
         ctx.fillRect(20, 100, 465, 346);
         ctx.font = '20px serif';
         ctx.fillStyle = 'green';
@@ -183,6 +188,7 @@ Overlay.prototype.render = function() {
             start_y = 40,
             verticalSpacing = 50;
 
+        // iterate through lines of text to display on overlay
         this.displayText.forEach(function(line) {
             ctx.fillText(line, start_y, start_x);
             start_x += verticalSpacing;
@@ -209,22 +215,20 @@ Overlay.prototype.remove = function() {
  */
 
 var Enemy = function(row, speed, direction) {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
     this.alpha = 1;
-    var row_y = [135,215,300];
-    this.x = -100;
+    this.row_y = [135,215,300];
     this.direction = direction;
+
+    // set up starting postion
+    this.x = -100;
     if(this.direction == 'left') {
         this.x = 600;
     }
-    this.y = row_y[row];
+
+    
+    this.y = this.row_y[row];
     console.log(this.y);
     this.speed = speed;
-    
-
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
     this.sprite = enemySprite;
 };
 
@@ -235,15 +239,16 @@ var Enemy = function(row, speed, direction) {
  */
 
 Enemy.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
-
+    // seed sprite speed with time to 
+    // ensure consistent movement 
+    // accross different machines
     var move = this.speed * dt;
+
+    // determine direction 
     if(this.direction == 'right') this.x += move;
     else this.x -= move;
     
-    //off screen reset
+    // if sprite off screen move to starting position
     if(this.x > 600) {
         this.x = -100;
     } else if(this.x < -100) {
@@ -260,9 +265,10 @@ Enemy.prototype.update = function(dt) {
 Enemy.prototype.render = function() {
     var resource = Resources.get(this.sprite);
     
-    //grab sprite image height and width
+    // grab sprite image height and width
     this.width = resource.width;
     this.height = resource.height;
+
     ctx.globalAlpha = this.alpha;
     ctx.drawImage(resource, this.x, this.y);
 };
@@ -292,10 +298,11 @@ var Player = function(scoreBoard) {
 
 Player.prototype.update = function(x = this.x, y = this.y) {
 
-    //Update player location
+    // Update player location
     this.x = x;
     this.y = y;
 
+    // if in river player scores
     if(this.y < 73) {
         this.score();
     }
@@ -340,8 +347,11 @@ Player.prototype.die = function() {
 
 Player.prototype.render = function() {
     var resource = Resources.get(this.sprite);
+    
+     //grab sprite image height and width
     this.width = resource.width;
     this.height = resource.height;
+    
     ctx.globalAlpha = this.alpha;
     ctx.drawImage(resource, this.x, this.y);
 };
@@ -385,9 +395,7 @@ Player.prototype.handleInput = function(input) {
     this.update(x, y);
 };
 
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
+// game setup
 var overlay = new Overlay();
 
 overlay.displayText = overlayTypes.start;
@@ -400,8 +408,7 @@ var player = new Player(scoreBoard);
 var allEnemies = [new Enemy(0,300,'right'),new Enemy(1,200,'left'),new Enemy(2,100,'left')];
 
 
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
+// game controls
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         37: 'left',
