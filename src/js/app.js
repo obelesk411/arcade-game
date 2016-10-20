@@ -36,8 +36,8 @@ var overlayTypes = {
 
 /**
  * @description Represents the score board
- * @param {object} overlay object
  * @constructor
+ * @param {object} overlay object
  */
 
 var ScoreBoard = function(overlay) {
@@ -208,10 +208,10 @@ Overlay.prototype.remove = function() {
 
 /**
  * @description Represents an enemy
+ * @constructor
  * @param {number} row
  * @param {number} speed how fast you want the enemy to go in ms
  * @param {string} direction 'right' or 'left'
- * @constructor
  */
 
 var Enemy = function(row, speed, direction) {
