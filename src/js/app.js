@@ -168,28 +168,37 @@ var Overlay = function(player, scoreBoard) {
     this.visible = false;
 };
 
+
+
 Overlay.prototype.render = function() {
     ctx.globalAlpha = this.alpha;
-    if(this.visible) this.display();
+
+    if(this.visible) {
+        ctx.fillRect(20, 100, 465, 346);
+        ctx.font = '20px serif';
+        ctx.fillStyle = 'green';
+        ctx.globalAlpha = 1;
+        
+        var start_x = 150,
+            start_y = 40,
+            verticalSpacing = 50;
+
+        this.displayText.forEach(function(line) {
+            ctx.fillText(line, start_y, start_x);
+            start_x += verticalSpacing;
+        });
+    }
 };
 
-//remove
+/**
+ * @description Removes overlay and unhalts player
+ * @returns {void}
+ */
+
 Overlay.prototype.remove = function() {
     this.visible = false;
     haltPlayer = false;
 };
-
-Overlay.prototype.display = function(start_x = 150, start_y = 40, verticalSpacing = 50) {
-    ctx.fillRect(20, 100, 465, 346); //20,546
-    ctx.font = '20px serif';
-    ctx.fillStyle = 'green';
-    ctx.globalAlpha = 1;
-    
-    this.displayText.forEach(function(line) {
-        ctx.fillText(line, start_y, start_x);
-        start_x += verticalSpacing;
-    });
-}
 
 /**
  * @description Represents an enemy
